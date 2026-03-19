@@ -1,0 +1,25 @@
+/* ══════════════════════════════════════
+   HERO — Logo, Headline Gradients
+   ══════════════════════════════════════ */
+
+/* ── Logo gradient text ── */
+.logo-text {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 40%, #ffffff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Hero headline gradient ── */
+.headline-gradient {
+  background: linear-gradient(
+    160deg,
+    #ffffff 0%,
+    #ffffff 45%,
+    #f59e0b 65%,
+    #fbbf24 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

@@ -1,0 +1,75 @@
+/* ══════════════════════════════════════
+   UTILITY — Glass, Glow, Border, Input, Badge
+   ══════════════════════════════════════ */
+
+/* ── Glass cards ── */
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.glass-amber {
+  background: rgba(245, 158, 11, 0.06);
+  border: 1px solid rgba(245, 158, 11, 0.18);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* ── Glow effects ── */
+.glow-amber {
+  box-shadow:
+    0 0 40px rgba(245, 158, 11, 0.15),
+    0 0 80px rgba(245, 158, 11, 0.06);
+}
+.glow-amber-sm {
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
+}
+
+/* ── Animated gradient border ── */
+.border-gradient {
+  position: relative;
+}
+.border-gradient::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(245, 158, 11, 0.5),
+    rgba(139, 92, 246, 0.3),
+    rgba(245, 158, 11, 0.1)
+  );
+  z-index: -1;
+}
+
+/* ── Input styles ── */
+.input-glass {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e8e8f0;
+  transition: all 0.25s ease;
+  font-family: "DM Sans", sans-serif;
+}
+.input-glass:focus {
+  outline: none;
+  border-color: rgba(245, 158, 11, 0.5);
+  background: rgba(245, 158, 11, 0.04);
+  box-shadow:
+    0 0 0 3px rgba(245, 158, 11, 0.1),
+    0 0 20px rgba(245, 158, 11, 0.08);
+}
+.input-glass::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+/* ── Badge pill ── */
+.badge {
+  font-family: "Syne", sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}

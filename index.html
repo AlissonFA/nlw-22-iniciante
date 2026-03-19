@@ -1,0 +1,820 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ClipMaker</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23f59e0b' opacity='0.15'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-size='18' fill='%23f59e0b'%3E✂%3C/text%3E%3C/svg%3E"
+    />
+
+    <!-- ── Frameworks & Icons ── -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <!-- ── Fonts ── -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- ── Tailwind config ── -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              display: ["Syne", "sans-serif"],
+              body: ["DM Sans", "sans-serif"],
+            },
+            colors: {
+              brand: {
+                50: "#fff8eb",
+                100: "#ffefc6",
+                200: "#ffdb89",
+                400: "#fbbf24",
+                500: "#f59e0b",
+                600: "#d97706",
+                900: "#78350f",
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- ── Stylesheets ── -->
+    <link rel="stylesheet" href="./assets/css/index.css" />
+  </head>
+
+  <body class="bg-mesh relative">
+    <!-- ═══════════════════════════════════════════
+         FLOATING ORBS (decorative background)
+    ════════════════════════════════════════════ -->
+    <div
+      class="fixed inset-0 pointer-events-none overflow-hidden z-0"
+      aria-hidden="true"
+    >
+      <div
+        class="float-orb absolute top-[15%] left-[8%] w-96 h-96 rounded-full"
+        style="
+          background: radial-gradient(
+            circle,
+            rgba(245, 158, 11, 0.06) 0%,
+            transparent 70%
+          );
+          filter: blur(40px);
+        "
+      ></div>
+      <div
+        class="float-orb-2 absolute bottom-[20%] right-[10%] w-80 h-80 rounded-full"
+        style="
+          background: radial-gradient(
+            circle,
+            rgba(139, 92, 246, 0.05) 0%,
+            transparent 70%
+          );
+          filter: blur(40px);
+        "
+      ></div>
+      <div
+        class="float-orb absolute top-[55%] left-[50%] w-64 h-64 rounded-full"
+        style="
+          background: radial-gradient(
+            circle,
+            rgba(245, 158, 11, 0.04) 0%,
+            transparent 70%
+          );
+          filter: blur(30px);
+        "
+      ></div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         NAVBAR
+    ════════════════════════════════════════════ -->
+    <nav
+      id="navbar"
+      class="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
+    >
+      <div
+        class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between"
+      >
+        <div class="flex items-center gap-2.5">
+          <div
+            class="relative w-8 h-8 rounded-lg glass-amber flex items-center justify-center glow-amber-sm"
+          >
+            <i data-lucide="scissors" class="w-4 h-4 text-brand-400"></i>
+          </div>
+          <span class="font-display font-800 text-lg logo-text tracking-tight"
+            >ClipMaker</span
+          >
+        </div>
+
+        <div class="hidden md:flex items-center gap-1">
+          <a
+            href="#funcionalidades"
+            class="px-4 py-2 text-sm text-white/50 hover:text-white/90 transition-colors duration-200 rounded-lg hover:bg-white/5"
+            >Funcionalidades</a
+          >
+          <a
+            href="#como-funciona"
+            class="px-4 py-2 text-sm text-white/50 hover:text-white/90 transition-colors duration-200 rounded-lg hover:bg-white/5"
+            >Como funciona</a
+          >
+          <a
+            href="#experimente"
+            class="px-4 py-2 text-sm text-white/50 hover:text-white/90 transition-colors duration-200 rounded-lg hover:bg-white/5"
+            >Experimente</a
+          >
+        </div>
+
+        <a
+          href="#experimente"
+          class="glass-amber px-5 py-2 rounded-full text-sm font-display font-600 text-brand-400 hover:bg-brand-500/10 transition-all duration-300 hover:scale-105 glow-amber-sm"
+        >
+          Começar grátis →
+        </a>
+      </div>
+    </nav>
+
+    <!-- ═══════════════════════════════════════════
+         HERO SECTION
+    ════════════════════════════════════════════ -->
+    <section
+      class="relative z-10 min-h-screen flex items-center justify-center px-6 pt-24 pb-16"
+    >
+      <div class="max-w-4xl mx-auto text-center">
+        <!-- Badge pill -->
+        <div
+          id="hero-badge"
+          class="inline-flex items-center gap-2 glass px-4 py-2 rounded-full mb-8 opacity-0"
+        >
+          <span
+            class="w-1.5 h-1.5 rounded-full bg-brand-400 animate-pulse"
+          ></span>
+          <span class="badge text-brand-400"
+            >Desenvolvido com Gemini AI + Cloudinary</span
+          >
+        </div>
+
+        <!-- Main headline -->
+        <h1
+          id="hero-title"
+          class="font-display font-800 text-5xl md:text-7xl lg:text-8xl tracking-tight leading-[0.95] mb-6 opacity-0"
+        >
+          <span class="headline-gradient">Momentos virais,</span><br />
+          <span class="text-white/90">extraídos em segundos.</span>
+        </h1>
+
+        <!-- Subheadline -->
+        <p
+          id="hero-sub"
+          class="text-lg md:text-xl text-white/45 max-w-2xl mx-auto leading-relaxed mb-10 opacity-0"
+        >
+          Faça upload do seu vídeo. Nossa IA assiste, lê e encontra o trecho
+          exato que o seu público vai compartilhar. Sem habilidades de edição —
+          só resultado puro.
+        </p>
+
+        <!-- CTA buttons -->
+        <div
+          id="hero-cta"
+          class="flex flex-col sm:flex-row items-center justify-center gap-4 opacity-0"
+        >
+          <a
+            href="#experimente"
+            class="group relative border-gradient rounded-2xl overflow-hidden"
+          >
+            <div
+              class="glass-amber px-8 py-4 rounded-2xl font-display font-600 text-base text-brand-400 flex items-center gap-2.5 transition-all duration-300 group-hover:bg-brand-500/12 glow-amber"
+            >
+              <i
+                data-lucide="zap"
+                class="w-4 h-4 transition-transform group-hover:rotate-12"
+              ></i>
+              Comece gratuitamente
+            </div>
+          </a>
+          <a
+            href="#como-funciona"
+            class="glass px-8 py-4 rounded-2xl font-display font-600 text-base text-white/60 hover:text-white/90 flex items-center gap-2.5 transition-all duration-300 hover:bg-white/6 hover:scale-[1.02]"
+          >
+            <i data-lucide="play-circle" class="w-4 h-4"></i>
+            Ver como funciona
+          </a>
+        </div>
+
+        <!-- Stats row -->
+        <div
+          id="hero-stats"
+          class="mt-16 grid grid-cols-3 gap-px glass rounded-2xl overflow-hidden opacity-0 max-w-lg mx-auto"
+        >
+          <div class="py-5 px-4 flex flex-col items-center glass">
+            <span class="font-display font-700 text-2xl text-white">30s</span>
+            <span class="text-xs text-white/35 mt-1">Tempo médio</span>
+          </div>
+          <div class="py-5 px-4 flex flex-col items-center glass">
+            <span class="font-display font-700 text-2xl text-brand-400"
+              >IA</span
+            >
+            <span class="text-xs text-white/35 mt-1">Análise inteligente</span>
+          </div>
+          <div class="py-5 px-4 flex flex-col items-center glass">
+            <span class="font-display font-700 text-2xl text-white">60s</span>
+            <span class="text-xs text-white/35 mt-1">Duração máxima</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         BENTO FEATURES GRID
+    ════════════════════════════════════════════ -->
+    <section id="funcionalidades" class="relative z-10 py-28 px-6">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-16" id="features-header">
+          <span class="badge text-brand-500/70 block mb-3"
+            >O que nos diferencia</span
+          >
+          <h2
+            class="font-display font-700 text-4xl md:text-5xl text-white tracking-tight"
+          >
+            Feito para criadores<br /><span class="text-white/40"
+              >que se movem rápido.</span
+            >
+          </h2>
+        </div>
+
+        <div
+          class="grid grid-cols-1 md:grid-cols-12 gap-4 auto-rows-auto"
+          id="bento-grid"
+        >
+          <!-- Card 1 — col-span 7 -->
+          <div
+            class="feature-card md:col-span-7 glass rounded-3xl p-8 flex flex-col justify-between min-h-[280px] bento-item"
+            style="border-color: rgba(255, 255, 255, 0.07)"
+          >
+            <div
+              class="w-12 h-12 rounded-2xl glass-amber flex items-center justify-center mb-5 glow-amber-sm"
+            >
+              <i data-lucide="brain" class="w-5 h-5 text-brand-400"></i>
+            </div>
+            <div>
+              <h3 class="font-display font-700 text-xl text-white mb-2">
+                Análise de Transcrição com Gemini
+              </h3>
+              <p class="text-white/45 text-sm leading-relaxed">
+                Nossa pipeline lê cada palavra do seu vídeo usando a transcrição
+                nativa do Cloudinary, depois envia o contexto completo ao Gemini
+                para encontrar os picos emocionais — os momentos que os
+                espectadores capturam e compartilham.
+              </p>
+            </div>
+            <!-- Decorative waveform -->
+            <div class="mt-6 flex items-end gap-0.5 h-8 opacity-30">
+              <div class="w-1 rounded-full bg-brand-400" style="height: 30%"></div>
+              <div class="w-1 rounded-full bg-brand-400" style="height: 60%"></div>
+              <div class="w-1 rounded-full bg-brand-400" style="height: 40%"></div>
+              <div class="w-1 rounded-full bg-brand-400" style="height: 80%"></div>
+              <div class="w-1 rounded-full bg-brand-400" style="height: 50%"></div>
+              <div class="w-1 rounded-full bg-brand-400" style="height: 100%"></div>
+              <div class="w-1 rounded-full bg-brand-400" style="height: 70%"></div>
+              <div class="w-1 rounded-full bg-brand-400" style="height: 45%"></div>
+              <div class="w-1 rounded-full bg-brand-400" style="height: 90%"></div>
+              <div class="w-1 rounded-full bg-brand-400" style="height: 55%"></div>
+              <div class="w-1 rounded-full bg-brand-400" style="height: 35%"></div>
+              <div class="w-1 rounded-full bg-brand-400" style="height: 75%"></div>
+              <div class="w-1 rounded-full bg-brand-400" style="height: 60%"></div>
+              <div class="w-1 rounded-full bg-brand-400" style="height: 85%"></div>
+              <div class="w-1 rounded-full bg-brand-400" style="height: 40%"></div>
+              <div class="w-1 rounded-full bg-brand-400" style="height: 65%"></div>
+            </div>
+          </div>
+
+          <!-- Card 2 — col-span 5 -->
+          <div
+            class="feature-card md:col-span-5 glass rounded-3xl p-8 flex flex-col justify-between min-h-[280px] bento-item"
+            style="border-color: rgba(255, 255, 255, 0.07)"
+          >
+            <div
+              class="w-12 h-12 rounded-2xl"
+              style="
+                background: rgba(139, 92, 246, 0.1);
+                border: 1px solid rgba(139, 92, 246, 0.2);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              "
+            >
+              <i data-lucide="timer" class="w-5 h-5" style="color: #a78bfa"></i>
+            </div>
+            <div>
+              <h3 class="font-display font-700 text-xl text-white mb-2">
+                Extração Inteligente de Tempo
+              </h3>
+              <p class="text-white/45 text-sm leading-relaxed">
+                O Gemini retorna timestamps precisos diretamente para a URL de
+                transformação do Cloudinary — seu clipe é renderizado no
+                servidor, sem precisar baixar nada.
+              </p>
+            </div>
+            <div
+              class="mt-4 glass rounded-xl px-4 py-3 flex items-center gap-3"
+            >
+              <span class="font-mono text-xs" style="color: #a78bfa"
+                >so_12.5,eo_45.2</span
+              >
+              <i
+                data-lucide="arrow-right"
+                class="w-3 h-3 text-white/30 flex-shrink-0"
+              ></i>
+              <span class="text-xs text-white/35">32.7s viral clip</span>
+            </div>
+          </div>
+
+          <!-- Card 3 — col-span 4 -->
+          <div
+            class="feature-card md:col-span-4 glass rounded-3xl p-8 flex flex-col justify-between min-h-[220px] bento-item"
+            style="border-color: rgba(255, 255, 255, 0.07)"
+          >
+            <div
+              class="w-12 h-12 rounded-2xl"
+              style="
+                background: rgba(34, 197, 94, 0.08);
+                border: 1px solid rgba(34, 197, 94, 0.15);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              "
+            >
+              <i
+                data-lucide="upload-cloud"
+                class="w-5 h-5"
+                style="color: #4ade80"
+              ></i>
+            </div>
+            <div>
+              <h3 class="font-display font-700 text-lg text-white mb-1.5">
+                Upload com um clique
+              </h3>
+              <p class="text-white/45 text-sm leading-relaxed">
+                O widget do Cloudinary cuida da transferência, transcodificação
+                e entrega via CDN automaticamente.
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 4 — col-span 4 -->
+          <div
+            class="feature-card md:col-span-4 glass rounded-3xl p-8 flex flex-col justify-between min-h-[220px] bento-item"
+            style="border-color: rgba(255, 255, 255, 0.07)"
+          >
+            <div
+              class="w-12 h-12 rounded-2xl glass-amber flex items-center justify-center glow-amber-sm"
+            >
+              <i data-lucide="repeat-2" class="w-5 h-5 text-brand-400"></i>
+            </div>
+            <div>
+              <h3 class="font-display font-700 text-lg text-white mb-1.5">
+                Lógica de Retry Automático
+              </h3>
+              <p class="text-white/45 text-sm leading-relaxed">
+                Verifica até 30× a disponibilidade da transcrição e tenta o
+                Gemini até 3× — resiliente por design.
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 5 — col-span 4 -->
+          <div
+            class="feature-card md:col-span-4 glass rounded-3xl p-8 flex flex-col justify-between min-h-[220px] bento-item"
+            style="border-color: rgba(255, 255, 255, 0.07)"
+          >
+            <div
+              class="w-12 h-12 rounded-2xl"
+              style="
+                background: rgba(239, 68, 68, 0.08);
+                border: 1px solid rgba(239, 68, 68, 0.15);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              "
+            >
+              <i data-lucide="video" class="w-5 h-5" style="color: #f87171"></i>
+            </div>
+            <div>
+              <h3 class="font-display font-700 text-lg text-white mb-1.5">
+                Prévia Instantânea
+              </h3>
+              <p class="text-white/45 text-sm leading-relaxed">
+                O clipe aparece no browser assim que a IA termina. Pronto para
+                compartilhar em segundos.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         HOW IT WORKS
+    ════════════════════════════════════════════ -->
+    <section id="como-funciona" class="relative z-10 py-28 px-6">
+      <div class="max-w-5xl mx-auto">
+        <div class="text-center mb-20" id="how-header">
+          <span class="badge text-brand-500/70 block mb-3"
+            >Três etapas. Zero atrito.</span
+          >
+          <h2
+            class="font-display font-700 text-4xl md:text-5xl text-white tracking-tight"
+          >
+            Do upload ao clipe<br /><span class="text-white/40"
+              >em menos de um minuto.</span
+            >
+          </h2>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8" id="steps-grid">
+          <!-- Step 1 -->
+          <div class="step-item text-center">
+            <div class="relative inline-flex mb-6">
+              <div
+                class="w-16 h-16 glass-amber rounded-2xl flex items-center justify-center glow-amber-sm"
+              >
+                <i data-lucide="key-round" class="w-6 h-6 text-brand-400"></i>
+              </div>
+              <div
+                class="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-brand-500 flex items-center justify-center"
+              >
+                <span class="text-[10px] font-display font-700 text-black">1</span>
+              </div>
+            </div>
+            <h3 class="font-display font-600 text-lg text-white mb-2">
+              Configure suas credenciais
+            </h3>
+            <p class="text-white/40 text-sm leading-relaxed">
+              Insira seu <strong class="text-white/60">Cloud Name</strong> e
+              <strong class="text-white/60">Upload Preset</strong> do Cloudinary,
+              e sua <strong class="text-white/60">chave de API do Gemini</strong>.
+              Tudo fica salvo apenas no seu navegador — nunca em servidores externos.
+            </p>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="step-item text-center">
+            <div class="relative inline-flex mb-6">
+              <div
+                class="w-16 h-16 glass rounded-2xl flex items-center justify-center"
+                style="border-color: rgba(255, 255, 255, 0.1)"
+              >
+                <i data-lucide="film" class="w-6 h-6 text-white/70"></i>
+              </div>
+              <div
+                class="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-white/20 flex items-center justify-center"
+              >
+                <span class="text-[10px] font-display font-700 text-white">2</span>
+              </div>
+            </div>
+            <h3 class="font-display font-600 text-lg text-white mb-2">
+              Faça upload do seu vídeo
+            </h3>
+            <p class="text-white/40 text-sm leading-relaxed">
+              Selecione qualquer vídeo do seu dispositivo. O Cloudinary cuida do
+              pesado — transcodificação e transcrição rodam automaticamente.
+            </p>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="step-item text-center">
+            <div class="relative inline-flex mb-6">
+              <div
+                class="w-16 h-16 glass-amber rounded-2xl flex items-center justify-center glow-amber-sm"
+              >
+                <i data-lucide="sparkles" class="w-6 h-6 text-brand-400"></i>
+              </div>
+              <div
+                class="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-brand-500 flex items-center justify-center"
+              >
+                <span class="text-[10px] font-display font-700 text-black">3</span>
+              </div>
+            </div>
+            <h3 class="font-display font-600 text-lg text-white mb-2">
+              Receba seu clipe viral
+            </h3>
+            <p class="text-white/40 text-sm leading-relaxed">
+              O Gemini identifica o melhor momento de 30–60s. Seu clipe aparece
+              pronto para baixar e compartilhar.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         THE APP
+    ════════════════════════════════════════════ -->
+    <section id="experimente" class="relative z-10 py-28 px-6">
+      <div class="max-w-2xl mx-auto">
+        <div class="text-center mb-12" id="app-header">
+          <span class="badge text-brand-500/70 block mb-3"
+            >Experimente agora</span
+          >
+          <h2
+            class="font-display font-700 text-4xl md:text-5xl text-white tracking-tight"
+          >
+            Seu clipe está<br /><span class="text-brand-400">esperando.</span>
+          </h2>
+          <p class="text-white/40 text-base mt-4">
+            Gratuito. Sem cadastro necessário.
+          </p>
+        </div>
+
+        <!-- App card -->
+        <div class="relative border-gradient rounded-[28px]">
+          <div class="glass rounded-[28px] p-8 md:p-10" style="border: none">
+
+            <!-- Cloudinary credentials -->
+            <div class="mb-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label
+                  class="flex items-center gap-2 text-xs font-display font-600 text-white/50 uppercase tracking-widest mb-3"
+                >
+                  <i data-lucide="cloud" class="w-3.5 h-3.5"></i>
+                  Cloud Name
+                </label>
+                <input
+                  id="cloudName"
+                  type="text"
+                  placeholder="ex: meu-cloud"
+                  class="input-glass w-full px-4 py-3.5 rounded-xl text-sm"
+                />
+              </div>
+              <div>
+                <label
+                  class="flex items-center gap-2 text-xs font-display font-600 text-white/50 uppercase tracking-widest mb-3"
+                >
+                  <i data-lucide="key" class="w-3.5 h-3.5"></i>
+                  Upload Preset
+                </label>
+                <input
+                  id="uploadPreset"
+                  type="text"
+                  placeholder="ex: meu-preset"
+                  class="input-glass w-full px-4 py-3.5 rounded-xl text-sm"
+                />
+              </div>
+            </div>
+            <!-- Cloudinary help link -->
+            <div class="flex items-center justify-between mb-6 mt-2">
+              <p class="text-xs text-white/25 ml-1">
+                Suas credenciais ficam salvas apenas no seu navegador.
+              </p>
+              <a
+                href="https://github.com/AlissonFA/clipmaker#-configurando-suas-credenciais"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="flex items-center gap-1 text-xs text-brand-500/60 hover:text-brand-400 transition-colors duration-200"
+              >
+                Como obter
+                <i data-lucide="arrow-up-right" class="w-3 h-3"></i>
+              </a>
+            </div>
+
+            <!-- API Key -->
+            <div class="mb-2">
+              <label
+                class="flex items-center gap-2 text-xs font-display font-600 text-white/50 uppercase tracking-widest mb-3"
+              >
+                <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+                Chave de API do Gemini
+              </label>
+              <div class="relative">
+                <input
+                  id="apiKey"
+                  type="password"
+                  placeholder="AIzaSy••••••••••••••••••••••••"
+                  class="input-glass w-full px-4 py-3.5 rounded-xl text-sm pr-12"
+                />
+                <button
+                  id="toggleKey"
+                  class="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 transition-colors"
+                >
+                  <i data-lucide="eye" class="w-4 h-4" id="eyeIcon"></i>
+                </button>
+              </div>
+            </div>
+            <!-- Gemini help link -->
+            <div class="flex items-center justify-between mb-6 mt-2">
+              <p class="text-xs text-white/25 ml-1">
+                Sua chave nunca é transmitida para nossos servidores.
+              </p>
+              <a
+                href="https://aistudio.google.com/app/apikey"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="flex items-center gap-1 text-xs text-brand-500/60 hover:text-brand-400 transition-colors duration-200"
+              >
+                Gerar chave
+                <i data-lucide="arrow-up-right" class="w-3 h-3"></i>
+              </a>
+            </div>
+
+            <!-- Divider -->
+            <div class="flex items-center gap-3 my-7">
+              <div class="flex-1 h-px bg-white/6"></div>
+              <div class="flex-1 h-px bg-white/6"></div>
+            </div>
+
+            <!-- Upload button -->
+            <button
+              id="uploadWidget"
+              class="group w-full relative overflow-hidden rounded-2xl py-5 flex flex-col items-center justify-center gap-3 transition-all duration-300 border border-dashed border-white/12 hover:border-brand-400/40 bg-white/[0.02] hover:bg-brand-500/[0.04]"
+            >
+              <div
+                class="w-12 h-12 glass-amber rounded-xl flex items-center justify-center glow-amber-sm transition-transform duration-300 group-hover:scale-110"
+              >
+                <i
+                  data-lucide="upload-cloud"
+                  class="w-5 h-5 text-brand-400"
+                ></i>
+              </div>
+              <div class="text-center">
+                <p class="font-display font-600 text-white/80 text-sm">
+                  Solte seu vídeo ou clique para fazer upload
+                </p>
+                <p class="text-xs text-white/30 mt-1">
+                  MP4, MOV, AVI · Até 500MB
+                </p>
+              </div>
+            </button>
+
+            <!-- Status display -->
+            <div id="statusContainer" class="hidden mt-6">
+              <div id="statusCard" class="glass rounded-2xl p-5">
+                <div class="flex items-start gap-4">
+                  <div id="statusIcon" class="relative flex-shrink-0">
+                    <div
+                      class="w-10 h-10 glass-amber rounded-xl flex items-center justify-center"
+                    >
+                      <i
+                        data-lucide="loader-2"
+                        class="w-4 h-4 text-brand-400 animate-spin"
+                        id="spinnerIcon"
+                      ></i>
+                    </div>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <p
+                      id="statusTitle"
+                      class="font-display font-600 text-sm text-white mb-1"
+                    >
+                      Processando seu vídeo…
+                    </p>
+                    <p
+                      id="statusDesc"
+                      class="text-xs text-white/40 leading-relaxed"
+                    >
+                      A IA está analisando a transcrição para encontrar seu
+                      melhor momento.
+                    </p>
+                    <div
+                      id="progressBar"
+                      class="mt-3 h-1 rounded-full overflow-hidden bg-white/6"
+                    >
+                      <div class="h-full shimmer rounded-full"></div>
+                    </div>
+                  </div>
+                  <div id="loadingDots" class="flex items-center gap-1 pt-1">
+                    <div class="dot-1 w-1.5 h-1.5 rounded-full bg-brand-400"></div>
+                    <div class="dot-2 w-1.5 h-1.5 rounded-full bg-brand-400"></div>
+                    <div class="dot-3 w-1.5 h-1.5 rounded-full bg-brand-400"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Error display -->
+            <div id="errorContainer" class="hidden mt-6">
+              <div
+                class="rounded-2xl p-5"
+                style="
+                  background: rgba(239, 68, 68, 0.06);
+                  border: 1px solid rgba(239, 68, 68, 0.15);
+                "
+              >
+                <div class="flex items-start gap-3">
+                  <i
+                    data-lucide="alert-triangle"
+                    class="w-5 h-5 flex-shrink-0 mt-0.5"
+                    style="color: #f87171"
+                  ></i>
+                  <div>
+                    <p class="font-display font-600 text-sm text-white mb-1">
+                      Algo deu errado
+                    </p>
+                    <p
+                      id="errorMsg"
+                      class="text-xs leading-relaxed"
+                      style="color: #fca5a5"
+                    ></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Video result card -->
+        <div id="resultCard" class="hidden mt-6 animate-reveal">
+          <div
+            class="glass rounded-[28px] overflow-hidden"
+            style="border: 1px solid rgba(245, 158, 11, 0.2)"
+          >
+            <div
+              class="px-6 py-4 flex items-center justify-between border-b border-white/5"
+            >
+              <div class="flex items-center gap-3">
+                <div
+                  class="relative pulse-ring w-2.5 h-2.5 rounded-full bg-brand-400"
+                ></div>
+                <span class="font-display font-600 text-sm text-white"
+                  >Seu clipe viral está pronto</span
+                >
+              </div>
+              <div class="flex items-center gap-1.5">
+                <div class="w-2 h-2 rounded-full bg-white/10"></div>
+                <div class="w-2 h-2 rounded-full bg-white/10"></div>
+                <div class="w-2 h-2 rounded-full bg-white/10"></div>
+              </div>
+            </div>
+            <div class="relative bg-black">
+              <video
+                id="video"
+                src=""
+                controls
+                class="w-full aspect-video object-contain"
+                style="max-height: 360px"
+              ></video>
+            </div>
+            <div class="px-6 py-4 flex items-center justify-between">
+              <div class="flex items-center gap-2 text-xs text-white/35">
+                <i
+                  data-lucide="check-circle-2"
+                  class="w-3.5 h-3.5 text-brand-400"
+                ></i>
+                Otimizado para redes sociais
+              </div>
+              <button
+                id="downloadBtn"
+                class="glass-amber px-4 py-1.5 rounded-full text-xs font-display font-600 text-brand-400 hover:bg-brand-500/12 transition-all duration-300 hover:scale-105 flex items-center gap-1.5 glow-amber-sm"
+              >
+                <i data-lucide="download" class="w-3 h-3"></i>
+                Baixar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         FOOTER
+    ════════════════════════════════════════════ -->
+    <footer class="relative z-10 py-12 px-6 border-t border-white/5">
+      <div
+        class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4"
+      >
+        <div class="flex items-center gap-2.5">
+          <div
+            class="w-7 h-7 rounded-lg glass-amber flex items-center justify-center"
+          >
+            <i data-lucide="scissors" class="w-3.5 h-3.5 text-brand-400"></i>
+          </div>
+          <span class="font-display font-600 text-sm logo-text">ClipMaker</span>
+        </div>
+        <p class="text-xs text-white/20">
+          Desenvolvido com Cloudinary · Gemini AI · Tailwind CSS · GSAP
+        </p>
+        <p class="text-xs text-white/20">
+          © 2025 ClipMaker — Todos os direitos reservados
+        </p>
+      </div>
+    </footer>
+
+    <!-- ── Cloudinary Upload Widget SDK ── -->
+    <script
+      src="https://upload-widget.cloudinary.com/latest/global/all.js"
+      type="text/javascript"
+    ></script>
+
+    <!-- ── Scripts ── -->
+    <script src="./assets/js/app.js"></script>
+    <script src="./assets/js/animations.js"></script>
+  </body>
+</html>

@@ -97,11 +97,18 @@ O fluxo final ficará assim:
 
 **Configurando cada nó:**
 
-**Nó 1 — On Asset Upload:** nenhuma alteração necessária, deixe as configurações padrão do template.
+**Nó 1 — On Asset Upload:**
+
+> ⚠️ **Atenção:** verifique se o campo **Asset type** está definido como **`All asset types`**. Caso venha pré-selecionado como `video`, a condição do nó seguinte nunca será acionada corretamente. Deixe como `All asset types` e delegue o filtro por tipo à condição.
+
+| Campo | Valor |
+|---|---|
+| Trigger for any asset | desmarcado |
+| Asset type | `All asset types` |
 
 **Nó 2 — Condição "Se vídeo":** preencha conforme a tabela acima.
 
-**Nó 3 — Generate and Save Transcript:** configure com os seguintes valores:
+**Nó 3 — Generate and Save Transcript:**
 
 | Campo | Valor |
 |---|---|
@@ -128,8 +135,8 @@ Após configurar os 3 nós, clique em **Save** e depois em **Activate** para ati
 
 Você pode visualizar e interagir com o projeto através dos links abaixo:
 
-* 📲 **[Acesse o layout original do projeto aqui]()**
-* 👉 **[Acesse o site funcionando aqui]()**
+* 📲 **[Acesse a abertura da NLW](https://www.youtube.com/live/4DsGnkMJ12Y?si=g7-BGOPMQvCjn_VF)**
+* 👉 **[Acesse o site funcionando aqui](https://alissonfa.github.io/nlw-22-iniciante/)**
 
 **Para rodar no seu computador (Local):**
 

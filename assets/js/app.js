@@ -41,13 +41,13 @@ const el = {
 
 // ── Persist credentials on change ────────────────────────────────────────
 el.cloudName.addEventListener("change", () =>
-  localStorage.setItem("clipmaker_cloud_name", el.cloudName.value.trim())
+  localStorage.setItem("clipmaker_cloud_name", el.cloudName.value.trim()),
 );
 el.uploadPreset.addEventListener("change", () =>
-  localStorage.setItem("clipmaker_upload_preset", el.uploadPreset.value.trim())
+  localStorage.setItem("clipmaker_upload_preset", el.uploadPreset.value.trim()),
 );
 el.apiKey.addEventListener("change", () =>
-  localStorage.setItem("clipmaker_api_key", el.apiKey.value.trim())
+  localStorage.setItem("clipmaker_api_key", el.apiKey.value.trim()),
 );
 
 // ── Toggle API key visibility ─────────────────────────────────────────────
@@ -137,7 +137,7 @@ const app = {
 
       setStatus(
         "Transcrevendo seu vídeo…",
-        `Tentativa ${i}/${maxAttempts} — O Cloudinary está processando o áudio.`
+        `Tentativa ${i}/${maxAttempts} — O Cloudinary está processando o áudio.`,
       );
 
       if (i < maxAttempts) await new Promise((r) => setTimeout(r, delay));
@@ -182,7 +182,7 @@ ${transcription}`;
 
     if (!raw)
       throw new Error(
-        "O Gemini retornou uma resposta vazia. Verifique sua chave de API."
+        "O Gemini retornou uma resposta vazia. Verifique sua chave de API.",
       );
 
     return raw;
@@ -220,9 +220,18 @@ el.button.addEventListener("click", () => {
     }, 2000);
   };
 
-  if (!cloudName) { highlight(el.cloudName); return; }
-  if (!uploadPreset) { highlight(el.uploadPreset); return; }
-  if (!apiKey) { highlight(el.apiKey); return; }
+  if (!cloudName) {
+    highlight(el.cloudName);
+    return;
+  }
+  if (!uploadPreset) {
+    highlight(el.uploadPreset);
+    return;
+  }
+  if (!apiKey) {
+    highlight(el.apiKey);
+    return;
+  }
 
   // Reset previous state
   el.errorContainer.classList.add("hidden");
@@ -244,36 +253,38 @@ el.button.addEventListener("click", () => {
           setStatus(
             "Aguardando transcrição…",
             "O Cloudinary está extraindo o áudio do seu vídeo.",
-            "loading"
+            "loading",
           );
 
           const isReady = await app.waitForTranscription();
           if (!isReady)
             throw new Error(
-              "Transcrição não ficou pronta após 30 tentativas. Tente novamente."
+              "Transcrição não ficou pronta após 30 tentativas. Tente novamente.",
             );
 
           setStatus(
             "Analisando com Gemini AI…",
             "Encontrando o segmento mais envolvente do seu vídeo.",
-            "loading"
+            "loading",
           );
           const viralMoment = await app.getViralMomentWithRetry();
 
           setStatus(
             "Gerando seu clipe…",
             "Aplicando transformação de tempo no Cloudinary.",
-            "loading"
+            "loading",
           );
           const viralURL = `https://res.cloudinary.com/${cloudName}/video/upload/${viralMoment}/${app.public_id}.mp4`;
 
           await new Promise((r) => setTimeout(r, 800));
           showResult(viralURL);
         } catch (err) {
-          setError(err.message || "Erro inesperado. Por favor, tente novamente.");
+          setError(
+            err.message || "Erro inesperado. Por favor, tente novamente.",
+          );
         }
       }
-    }
+    },
   );
 
   widget.open();
